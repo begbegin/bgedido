@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,20 +28,24 @@ public class ControllerDepartement {
 	@Autowired
 	DepartementRepository departementRepository;
 	
-	Departement departement;
 	@PostMapping(value="/departements")
-	public List<Departement> saveDepartement(@RequestBody final Departement departement )
+	public long saveDepartement(@RequestBody final Departement departement )
 	{
-		
 		departementRepository.save(departement);
-		return (List<Departement>)departementRepository.findAll();
-	
+		return departement.getId();
 	}
 	
-	@GetMapping(value="/departements")
-	public List<Departement> getDepartements()
-	{
-		return  (List<Departement>)departementRepository.findAll();
+	@GetMapping("/departements")
+	public ResponseEntity<Page> findAllDepartement(Pageable pageable) {
+		PageRequest pageables=new PageRequest(0,3);
+		
+		Page<Departement> page = departementRepository.findAll(pageables);
+		HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("nombre", Integer.toString(page.getTotalPages()));
+	 
+	    return ResponseEntity.ok()
+	      .headers(responseHeaders)
+	      .body(departementRepository.findAll(pageables));
 	}
 	
 	@GetMapping(value="/departements/{id}")
@@ -66,10 +74,6 @@ public class ControllerDepartement {
 		return departementRepository.findByLibContaining(lib);
 	}
 	
-	@GetMapping(value="departementByPage/{nbrePage}")
-	public Page<Departement>showDeprtement(@PathVariable int nbrePage )
-	{
-		PageRequest pageables=new PageRequest(nbrePage,5);
-		return departementRepository.findAll(pageables);
-	}
+	
+	
 }

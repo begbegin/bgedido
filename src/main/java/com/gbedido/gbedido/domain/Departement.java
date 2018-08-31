@@ -16,13 +16,11 @@ public class Departement {
 	@Column(length=80)
 	private String lib;
 	
-	
-	
 	public Departement() {
 		
 	}
-	
 	public Departement(String lib) {
+		getId();
 		this.lib = lib;
 	}
 	public long getId() {

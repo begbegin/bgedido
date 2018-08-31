@@ -8,8 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,16 +36,16 @@ public class ControllerDepartement {
 	}
 	
 	@GetMapping("/departements")
-	public ResponseEntity<Page> findAllDepartement(Pageable pageable) {
+	public ResponseEntity<Page<Departement>> findAllDepartement(Pageable pageable) {
 		PageRequest pageables=new PageRequest(0,3);
 		
-		Page<Departement> page = departementRepository.findAll(pageables);
+		Page<Departement> page = departementRepository.findAll(pageable);
 		HttpHeaders responseHeaders = new HttpHeaders();
 	    responseHeaders.add("nombre", Integer.toString(page.getTotalPages()));
-	 
+	    
 	    return ResponseEntity.ok()
 	      .headers(responseHeaders)
-	      .body(departementRepository.findAll(pageables));
+	      .body(page);
 	}
 	
 	@GetMapping(value="/departements/{id}")
@@ -69,9 +69,17 @@ public class ControllerDepartement {
 	}
 	
 	@GetMapping(value="/search-departements-by-libelle")
-	public List<Departement> searchDepartement(String lib)
+	public ResponseEntity<List<Departement>> searchDepartement(String lib,Pageable pageable)
 	{
-		return departementRepository.findByLibContaining(lib);
+		System.out.println(pageable);
+		Page<Departement> page = departementRepository.findByLibContaining(lib,pageable);
+		HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("nombre", Integer.toString(page.getTotalPages()));
+	 
+	    return new ResponseEntity(page.getContent(),responseHeaders,HttpStatus.OK);
+	      //.headers(responseHeaders)
+	      //.body(page);
+		
 	}
 	
 	

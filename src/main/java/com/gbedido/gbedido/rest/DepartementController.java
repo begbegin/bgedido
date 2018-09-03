@@ -1,12 +1,11 @@
 package com.gbedido.gbedido.rest;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,33 +22,30 @@ import com.gbedido.gbedido.repository.DepartementRepository;
 
 
 @RestController
-public class ControllerDepartement {
+public class DepartementController {
 
 	@Autowired
 	DepartementRepository departementRepository;
 	
 	@PostMapping(value="/departements")
-	public long saveDepartement(@RequestBody final Departement departement )
+	public ResponseEntity <Departement> saveDepartement(@RequestBody final Departement departement )
 	{
 		departementRepository.save(departement);
-		return departement.getId();
+		HttpHeaders header= new HttpHeaders();
+		header.add("202","Requete Accepter");
+		return ResponseEntity.accepted().headers(header).body(null);
 	}
 	
 	@GetMapping("/departements")
-	public ResponseEntity<Page<Departement>> findAllDepartement(Pageable pageable) {
-		PageRequest pageables=new PageRequest(0,3);
-		
+	public ResponseEntity<Page<Departement>> findAllDepartement(@PageableDefault(size=10)Pageable pageable) {
 		Page<Departement> page = departementRepository.findAll(pageable);
-		HttpHeaders responseHeaders = new HttpHeaders();
-	    responseHeaders.add("nombre", Integer.toString(page.getTotalPages()));
-	    
-	    return ResponseEntity.ok()
-	      .headers(responseHeaders)
-	      .body(page);
+		HttpHeaders header = new HttpHeaders();
+	    header.add("nbreTotalePage ",Integer.toString(page.getTotalPages()));
+	    return ResponseEntity.accepted().headers(header).body(page);
 	}
 	
 	@GetMapping(value="/departements/{id}")
-	public Departement getDepartement(@PathVariable long id)
+	public Departement getDepartement(@PathVariable Long id)
 	{
 		return departementRepository.findById(id).get();
 	}
@@ -62,26 +58,21 @@ public class ControllerDepartement {
 	}
 
 	@DeleteMapping(value="/departements/{id}")
-	public String deleteDepartement(@PathVariable long id)
+	public String deleteDepartement(@PathVariable Long id)
 	{
 		departementRepository.deleteById(id);	
 		return "departement supprimer";
 	}
 	
 	@GetMapping(value="/search-departements-by-libelle")
-	public ResponseEntity<List<Departement>> searchDepartement(String lib,Pageable pageable)
+	public ResponseEntity<Page<Departement>> searchDepartement(String lib,@PageableDefault(size=3) Pageable pageable)
 	{
 		System.out.println(pageable);
 		Page<Departement> page = departementRepository.findByLibContaining(lib,pageable);
 		HttpHeaders responseHeaders = new HttpHeaders();
 	    responseHeaders.add("nombre", Integer.toString(page.getTotalPages()));
-	 
 	    return new ResponseEntity(page.getContent(),responseHeaders,HttpStatus.OK);
-	      //.headers(responseHeaders)
-	      //.body(page);
 		
 	}
-	
-	
 	
 }

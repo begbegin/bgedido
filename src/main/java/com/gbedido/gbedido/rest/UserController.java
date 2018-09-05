@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +23,19 @@ import com.gbedido.gbedido.repository.UserRepository;
 @RequestMapping("/api/users")
 public class UserController {
 
-	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	public UserController(UserRepository userRepository,
+            BCryptPasswordEncoder bCryptPasswordEncoder) {
+		this.userRepository = userRepository;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+	}
 	
 	@PostMapping
 	public ResponseEntity<User> saveUser(@RequestBody User user)
 	{
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		return ResponseEntity.ok().body(userRepository.save(user));
 	}
 	

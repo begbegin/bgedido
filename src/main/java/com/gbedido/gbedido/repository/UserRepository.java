@@ -9,5 +9,6 @@ import com.gbedido.gbedido.domain.User;
 public interface UserRepository extends JpaRepository<User,Long>{
 
 	public Page<User> findByNomContaining(String nom, Pageable pageable);
+	public User findByLogin(String login);
 
 }

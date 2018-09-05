@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gbedido.gbedido.domain.Departement;
 import com.gbedido.gbedido.repository.DepartementRepository;
-import com.gbedido.gbedido.repository.ServiceRepository;
 
 
 @RestController
@@ -28,7 +27,7 @@ public class DepartementController {
 
 	@Autowired
 	DepartementRepository departementRepository;
-	ServiceRepository serviceRepository;
+	
 	@PostMapping
 	public ResponseEntity <Departement> saveDepartement(@RequestBody final Departement departement )
 	{

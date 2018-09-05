@@ -8,12 +8,6 @@ import com.gbedido.gbedido.domain.Departement;
 
 public interface DepartementRepository extends JpaRepository<Departement,Long>{
 	
-	
-	
-	
 	public Page<Departement> findByLibContaining(String lib,Pageable pageable);	
-	
-	
-	
 	
 }

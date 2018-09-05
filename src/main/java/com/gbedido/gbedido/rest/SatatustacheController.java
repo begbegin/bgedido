@@ -14,53 +14,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gbedido.gbedido.domain.Poste;
-import com.gbedido.gbedido.repository.PosteRepository;
+import com.gbedido.gbedido.domain.Statustache;
+import com.gbedido.gbedido.repository.StatustacheRepository;
+
 
 @RestController
-@RequestMapping("/api/postes")
-public class PosteController {
+@RequestMapping("/api/status-taches")
+public class SatatustacheController {
 
 	@Autowired
-	PosteRepository postRepository;
-	
+	StatustacheRepository statusTacheRepository;
+
 	@PostMapping
-	public ResponseEntity <Poste>  savePost(@RequestBody Poste poste)
+	public ResponseEntity<Statustache> saveStatustache(@RequestBody Statustache statustache)
 	{
-		return ResponseEntity.ok().body(postRepository.save(poste));
+		return ResponseEntity.ok().body(statusTacheRepository.save(statustache));
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<Poste>> findAllPostes(@PageableDefault(size=10)Pageable pageable)
+	public ResponseEntity<Page<Statustache>> findAllStatustaches(@PageableDefault(size=10)Pageable pageable)
 	{
-		Page<Poste> page=postRepository.findAll(pageable);
+		Page<Statustache> page=statusTacheRepository.findAll(pageable);
 		return ResponseEntity.ok().body(page);
 	}
 	
-	@GetMapping("/search-by-libelle")
-	public ResponseEntity <Page<Poste>>searchPoste(String poste, @PageableDefault(size=10)Pageable pageable)
-	{
-		Page<Poste> page=postRepository.findByPosteContaining(poste, pageable);
-		return ResponseEntity.ok().body(page);
-	}
 	
 	@GetMapping("/{id}")
-	public Poste findById(@PathVariable Long id)
+	public Statustache findById(@PathVariable Long id)
 	{
-		return postRepository.findById(id).get();
+		return statusTacheRepository.findById(id).get();
 	}
 	
 	@PutMapping
-	public Poste updatePoste(@RequestBody Poste poste)
+	public Statustache updateStatustache(@RequestBody final Statustache statusTache)
 	{
-		return postRepository.save(poste);
 		
+		return statusTacheRepository.save(statusTache);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Long> deletePoste(@PathVariable Long id)
+	public ResponseEntity<Long> deletestatusTache(@PathVariable Long id)
 	{
-		postRepository.deleteById(id);
+		statusTacheRepository.deleteById(id);
 		return ResponseEntity.ok().body(id);
 	}
 }

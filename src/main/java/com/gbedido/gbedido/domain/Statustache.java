@@ -2,7 +2,6 @@ package com.gbedido.gbedido.domain;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,32 +10,34 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class StatusTache {
+public class Statustache {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@Column(length=45)
 	private String status;
 	private Date date;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	private Tache tache;
-
-	public StatusTache() {
+	@ManyToOne
+	Rapport rapport;
+	public Statustache() {
 
 	}
-
-	public StatusTache(String status, Date date, Tache tache) {
+	
+	public Statustache(String status, Date date, Tache tache, Rapport rapport) {
 		this.status = status;
 		this.date = date;
 		this.tache = tache;
+		this.rapport = rapport;
 	}
 
-	public Long getId_status() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId_status(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -62,5 +63,13 @@ public class StatusTache {
 
 	public void setTache(Tache tache) {
 		this.tache = tache;
+	}
+
+	public Rapport getRapport() {
+		return rapport;
+	}
+
+	public void setRapport(Rapport rapport) {
+		this.rapport = rapport;
 	}
 }

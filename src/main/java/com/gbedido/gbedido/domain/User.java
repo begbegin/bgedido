@@ -1,23 +1,26 @@
 package com.gbedido.gbedido.domain;
 
-import javax.persistence.CascadeType;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
-public class Agent {
+public class User {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@Column(length=80)
 	private String nom;
 	@Column(length=100)
-	private String prenom;
+	private String prenoms;
 	@Column(length=45)
 	private String login;
 	@Column(length=45)
@@ -26,28 +29,30 @@ public class Agent {
 	private int telephone;
 	@Column(length=45)
 	private String email;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	private Poste poste;
-	
-	public Agent() {
+	@OneToMany(mappedBy="user")
+    Set<Rapport> rapport = new HashSet<Rapport>();
+	public User() {
 		
 	}
-
-	public Agent(String nom, String prenom, String login, String password, int telephone, String email, Poste poste) {
+	
+	public User(String nom, String prenoms, String login, String password, int telephone, String email, Poste poste,
+			Set<Rapport> rapport) {
 		this.nom = nom;
-		this.prenom = prenom;
+		this.prenoms = prenoms;
 		this.login = login;
 		this.password = password;
 		this.telephone = telephone;
 		this.email = email;
 		this.poste = poste;
+		this.rapport = rapport;
 	}
-
-	public Long getId_agent() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId_agent(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -59,12 +64,12 @@ public class Agent {
 		this.nom = nom;
 	}
 
-	public String getPrenom() {
-		return prenom;
+	public String getPrenoms() {
+		return prenoms;
 	}
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	public void setPrenoms(String prenoms) {
+		this.prenoms = prenoms;
 	}
 
 	public String getLogin() {

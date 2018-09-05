@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,53 +12,51 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gbedido.gbedido.domain.Commentaire;
 import com.gbedido.gbedido.repository.CommentaireRepository;
 
 @RestController
+@RequestMapping("/api/commentaires")
 public class CommentaireController {
 
 	@Autowired
 
 	CommentaireRepository commentaireRepository;
 	
-	Commentaire commentaire;
 
-	@PostMapping(value="/commentaires")
-	public void saveCommentaire(@RequestBody Commentaire commentaire)
+	@PostMapping
+	public ResponseEntity<Commentaire> saveCommentaire(@RequestBody Commentaire commentaire)
 	{
-		commentaireRepository.save(commentaire);
+		return ResponseEntity.ok().body(commentaireRepository.save(commentaire));
 	}
 	
-	@GetMapping(value="/Commentaires")
+	@GetMapping
 	public ResponseEntity<Page<Commentaire>> findAllCommenttaire(@PageableDefault(size=10)Pageable pageable)
 	{
 		Page<Commentaire> page=commentaireRepository.findAll(pageable);
-		HttpHeaders header=new HttpHeaders();
-		header.add("nbrTotalePage", Integer.toString(page.getTotalPages()));
-		return ResponseEntity.accepted().headers(header).body(page);
+		return ResponseEntity.ok().body(page);
 	}
 	
 	
-	@GetMapping(value="/commentaire/{id}")
+	@GetMapping("/{id}")
 	public Commentaire findById(@PathVariable Long id)
 	{
 		return commentaireRepository.findById(id).get();
 	}
 	
-	@PutMapping(value="/commentaires")
-	public String updateCommentaire(@RequestBody Commentaire commentaire)
+	@PutMapping
+	public Commentaire updateCommentaire(@RequestBody Commentaire commentaire)
 	{
-		commentaireRepository.save(commentaire);
-		return "Mise A jour Ok";
+		return commentaireRepository.save(commentaire);
 	}
 	
-	@DeleteMapping(value="/commentaire/{id}")
-	public String deleteCommentaire(@PathVariable Long id)
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Long> deleteCommentaire(@PathVariable Long id)
 	{
 		commentaireRepository.deleteById(id);
-		return "Suppression faite";
+		return ResponseEntity.ok().body(id);
 	}
 }

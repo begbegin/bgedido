@@ -1,12 +1,14 @@
 package com.gbedido.gbedido.rest;
 
+
+
+
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,60 +16,55 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gbedido.gbedido.domain.Rapport;
 import com.gbedido.gbedido.repository.RapportRepository;
 
 @RestController
+@RequestMapping("/api/rapports")
 public class RapportController {
 
 	@Autowired
 	RapportRepository rapportRepository;
-	
-	Rapport rapport;
 
-	@PostMapping(value="/rapports")
-	public void saveRapport(@RequestBody Rapport rapport)
+	@PostMapping
+	public ResponseEntity<Rapport> saveRapport(@RequestBody Rapport rapport)
 	{
-		rapportRepository.save(rapport);
+		return ResponseEntity.ok().body(rapportRepository.save(rapport));
 	}
 	
-	@GetMapping(value="/rapports")
+	@GetMapping
 	public ResponseEntity<Page<Rapport>> findAllRapport(@PageableDefault(size=10)Pageable pageable)
 	{
 		Page<Rapport> page=rapportRepository.findAll(pageable);
-		HttpHeaders header=new HttpHeaders();
-		header.add("nbrTotalePage", Integer.toString(page.getTotalPages()));
-		return ResponseEntity.accepted().headers(header).body(page);
+		return ResponseEntity.ok().body(page);
 	}
 	
-	@GetMapping(value="/search-rapport-by-libelle")
+	@GetMapping("/search-by-libelle-date")
 	public ResponseEntity <Page<Rapport>>searchRapport(String lib,Date date, @PageableDefault(size=10)Pageable pageable)
 	{
-		Page<Rapport> page=rapportRepository.findByLibContaining(lib, date, pageable);
-		HttpHeaders header=new HttpHeaders();
-		header.add("nbrTotalePage", Integer.toString(page.getTotalPages()));
-		return ResponseEntity.accepted().headers(header).body(page);
+		Page<Rapport> page=rapportRepository.findByLibContaining(lib,date, pageable);
+		return ResponseEntity.ok().body(page);
 	}
 	
-	@GetMapping(value="/rapport/{id}")
+	@GetMapping("/{id}")
 	public Rapport findById(@PathVariable Long id)
 	{
 		return rapportRepository.findById(id).get();
 	}
 	
-	@PutMapping(value="/rapports")
-	public String updateRapport(@RequestBody Rapport rapport)
+	@PutMapping
+	public Rapport updateRapport(@RequestBody Rapport rapport)
 	{
-		rapportRepository.save(rapport);
-		return "Mise A jour Ok";
+		return rapportRepository.save(rapport);
 	}
 	
-	@DeleteMapping(value="/rapport/{id}")
-	public String deleteRapport(@PathVariable Long id)
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Long> deleteRapport(@PathVariable Long id)
 	{
 		rapportRepository.deleteById(id);
-		return "Suppression faite";
+		return ResponseEntity.ok().body(id);
 	}
 }

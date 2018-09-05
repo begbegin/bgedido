@@ -14,53 +14,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gbedido.gbedido.domain.Poste;
-import com.gbedido.gbedido.repository.PosteRepository;
+import com.gbedido.gbedido.domain.User;
+import com.gbedido.gbedido.repository.UserRepository;
+
 
 @RestController
-@RequestMapping("/api/postes")
-public class PosteController {
+@RequestMapping("/api/users")
+public class UserController {
 
 	@Autowired
-	PosteRepository postRepository;
+	UserRepository userRepository;
 	
 	@PostMapping
-	public ResponseEntity <Poste>  savePost(@RequestBody Poste poste)
+	public ResponseEntity<User> saveUser(@RequestBody User user)
 	{
-		return ResponseEntity.ok().body(postRepository.save(poste));
+		return ResponseEntity.ok().body(userRepository.save(user));
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<Poste>> findAllPostes(@PageableDefault(size=10)Pageable pageable)
+	public ResponseEntity<Page<User>> findAllUsers(@PageableDefault(size=10)Pageable pageable)
 	{
-		Page<Poste> page=postRepository.findAll(pageable);
+		Page<User> page=userRepository.findAll(pageable);
 		return ResponseEntity.ok().body(page);
 	}
 	
-	@GetMapping("/search-by-libelle")
-	public ResponseEntity <Page<Poste>>searchPoste(String poste, @PageableDefault(size=10)Pageable pageable)
+	@GetMapping("/search-by-firstname")
+	public ResponseEntity <Page<User>>searchUser(String nom, @PageableDefault(size=10)Pageable pageable)
 	{
-		Page<Poste> page=postRepository.findByPosteContaining(poste, pageable);
+		Page<User> page=userRepository.findByNomContaining(nom, pageable);
 		return ResponseEntity.ok().body(page);
 	}
 	
 	@GetMapping("/{id}")
-	public Poste findById(@PathVariable Long id)
+	public User findById(@PathVariable Long id)
 	{
-		return postRepository.findById(id).get();
+		return userRepository.findById(id).get();
 	}
 	
 	@PutMapping
-	public Poste updatePoste(@RequestBody Poste poste)
+	public User updateUser(@RequestBody User user)
 	{
-		return postRepository.save(poste);
-		
+		return userRepository.save(user);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Long> deletePoste(@PathVariable Long id)
+	public ResponseEntity<Long> deleteUser(@PathVariable Long id)
 	{
-		postRepository.deleteById(id);
+		userRepository.deleteById(id);
 		return ResponseEntity.ok().body(id);
 	}
 }

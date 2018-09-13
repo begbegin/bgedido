@@ -16,9 +16,9 @@ public interface TacheRepository extends JpaRepository<Tache,Long>{
 	public Page<Tache> findByLibContaining(String lib, Pageable pageable);
 	
 	
-	@Query("SELECT tache FROM Statustache s WHERE s.date=:dateJour AND s.rapport.user.id=:idUsers" )
-	public Page<Tache> findAllByDate(@Param("dateJour") Date date, @Param("idUsers") Long id, Pageable pageable);
+	@Query("SELECT tache FROM Statustache s WHERE s.date=:dateJour AND s.rapport.user.id=:userId" )
+	public Page<Tache> findAllByDate(@Param("dateJour") Date date, @Param("userId") Long id, Pageable pageable);
 	
-	@Query("SELECT tache FROM Statustache s WHERE s.status=:status AND s.rapport.user.id=:idUsers" )
-	public Page<Tache> findAllByStatus(@Param("status") String status, @Param("idUsers") Long id, Pageable pageable);
+	@Query("SELECT tache FROM Statustache s WHERE s.status=:status AND s.rapport.user.id=:userId" )
+	public Page<Tache> findAllByStatus(@Param("status") String status, @Param("userId") Long id, Pageable pageable);
 }

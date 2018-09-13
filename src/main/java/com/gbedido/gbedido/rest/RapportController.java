@@ -73,4 +73,10 @@ public class RapportController {
 		rapportRepository.deleteById(id);
 		return ResponseEntity.ok().body(id);
 	}
+	@GetMapping("/byusers")
+	public ResponseEntity <Page<Rapport>> rapportByusers(Long userId, @PageableDefault(size=10)Pageable pageable)
+	{
+		Page<Rapport> page=rapportRepository.findByUserId(userId, pageable);
+		return ResponseEntity.ok().body(page);
+	}
 }

@@ -70,7 +70,7 @@ public class TacheController {
 	}
 
 	@GetMapping("/tachestoday")
-	public ResponseEntity<Page<Tache>> tachesToday(Long idUsers,String dateString,@PageableDefault(size=10)Pageable pageable) throws ParseException
+	public ResponseEntity<Page<Tache>> tachesToday(Long userId,String dateString,@PageableDefault(size=10)Pageable pageable) throws ParseException
 	{
 		Date date;
 		if(dateString==null)
@@ -82,7 +82,7 @@ public class TacheController {
 			SimpleDateFormat formater= new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
 			date = formater.parse(dateString);
 		}
-		Page<Tache> page = tacheRepository.findAllByDate(date, idUsers, pageable);
+		Page<Tache> page = tacheRepository.findAllByDate(date, userId, pageable);
 		return ResponseEntity.ok().body(page);
 	}
 	
@@ -92,7 +92,7 @@ public class TacheController {
 		String statu;
 		if(status==null)
 		{
-			statu= "Commencer";
+			statu= "encours";
 		}
 		else
 		{

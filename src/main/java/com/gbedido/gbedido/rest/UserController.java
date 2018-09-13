@@ -1,6 +1,5 @@
 package com.gbedido.gbedido.rest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,8 +31,9 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> saveUser(@RequestBody User user)
+	public ResponseEntity<User> saveUser(@RequestBody final User user)
 	{
+		
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		return ResponseEntity.ok().body(userRepository.save(user));
 	}
@@ -42,8 +41,7 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<Page<User>> findAllUsers(@PageableDefault(size=10)Pageable pageable)
 	{
-		Page<User> page=userRepository.findAll(pageable);
-		return ResponseEntity.ok().body(page);
+		return ResponseEntity.ok().body(userRepository.findAll(pageable));
 	}
 	
 	@GetMapping("/search-by-firstname")
@@ -59,9 +57,10 @@ public class UserController {
 		return userRepository.findById(id).get();
 	}
 	
-	@PutMapping
-	public User updateUser(@RequestBody User user)
+	@PostMapping("/{id}")
+	public User updateUser(@PathVariable Long id, @RequestBody final User user)
 	{
+		user.setId(id);
 		return userRepository.save(user);
 	}
 	

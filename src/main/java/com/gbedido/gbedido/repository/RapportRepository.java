@@ -11,6 +11,6 @@ import com.gbedido.gbedido.domain.Rapport;
 
 public interface RapportRepository extends JpaRepository<Rapport,Long>{
 
-	public Page<Rapport> findByLibContaining(String lib,Date date,Pageable pageable);
+	public Page<Rapport> findByLibAndDate(String lib,Date date, Pageable pageable);
 	
 }

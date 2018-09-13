@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +27,7 @@ public class CommentaireController {
 	
 
 	@PostMapping
-	public ResponseEntity<Commentaire> saveCommentaire(@RequestBody Commentaire commentaire)
+	public ResponseEntity<Commentaire> saveCommentaire(@RequestBody final Commentaire commentaire)
 	{
 		return ResponseEntity.ok().body(commentaireRepository.save(commentaire));
 	}
@@ -47,9 +46,10 @@ public class CommentaireController {
 		return commentaireRepository.findById(id).get();
 	}
 	
-	@PutMapping
-	public Commentaire updateCommentaire(@RequestBody Commentaire commentaire)
+	@PostMapping("/{id}")
+	public Commentaire updateCommentaire(@PathVariable Long id, @RequestBody final Commentaire commentaire)
 	{
+		commentaire.setId(id);
 		return commentaireRepository.save(commentaire);
 	}
 	

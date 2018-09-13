@@ -22,10 +22,11 @@ public class Departement {
 	@OneToMany(mappedBy="departement")
     Set<Service> services = new HashSet<Service>();
 
-	public Departement() {
-		
-	}
 
+	public Departement() {
+	
+	}
+	
 	public Departement(String lib, Set<Service> services) {
 		this.lib = lib;
 		this.services = services;
@@ -43,5 +44,5 @@ public class Departement {
 	public void setLib(String lib) {
 		this.lib = lib;
 	}
-
+	
 }

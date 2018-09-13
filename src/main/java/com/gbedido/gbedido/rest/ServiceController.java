@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +24,7 @@ public class ServiceController {
 	ServiceRepository serviceRepository;
 
 	@PostMapping
-	public ResponseEntity<Service> saveService(@RequestBody Service service)
+	public ResponseEntity<Service> saveService(@RequestBody final Service service)
 	{
 		return ResponseEntity.ok().body(serviceRepository.save(service));
 	}
@@ -49,10 +48,10 @@ public class ServiceController {
 		return serviceRepository.findById(id).get();
 	}
 	
-	@PutMapping
-	public Service updateService(@RequestBody Service service)
+	@PostMapping("/{id}")
+	public Service updateService(@PathVariable Long id, @RequestBody final Service service)
 	{
-		
+		service.setId(id);
 		return serviceRepository.save(service);
 	}
 	
@@ -62,4 +61,5 @@ public class ServiceController {
 		serviceRepository.deleteById(id);
 		return ResponseEntity.ok().body(id);
 	}
+	
 }

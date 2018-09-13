@@ -19,24 +19,26 @@ public class Poste {
 	private Long id;
 	@Column(length=80)
 	private String poste;
-	private boolean chef_service;
-	private boolean chef_departement;
+	private boolean chefService;
+	private boolean chefDepartement;
 	@ManyToOne
 	private Service service;
 	@OneToMany(mappedBy="poste")
     Set<User> users = new HashSet<User>();
 	
 	
-	public Poste() {
-		
-	}
 	
-	public Poste(String poste, boolean chef_service, boolean chef_departement, Service service,Set<User> users) {
+	public Poste() {
+
+	}
+
+	public Poste(String poste, boolean chefService, boolean chefDepartement, Service service, Set<User> users) {
+		super();
 		this.poste = poste;
-		this.chef_service = chef_service;
-		this.chef_departement = chef_departement;
+		this.chefService = chefService;
+		this.chefDepartement = chefDepartement;
 		this.service = service;
-		this.users=users;
+		this.users = users;
 	}
 
 	public Long getId() {
@@ -56,19 +58,19 @@ public class Poste {
 	}
 
 	public boolean isChefService() {
-		return chef_service;
+		return chefService;
 	}
 
-	public void setChefService(boolean chef_service) {
-		this.chef_service = chef_service;
+	public void setChefService(boolean chefService) {
+		this.chefService = chefService;
 	}
 
 	public boolean isChefDepartement() {
-		return chef_departement;
+		return chefDepartement;
 	}
 
-	public void setChefDepartement(boolean chef_departement) {
-		this.chef_departement = chef_departement;
+	public void setChefDepartement(boolean chefDepartement) {
+		this.chefDepartement = chefDepartement;
 	}
 
 	public Service getService() {
@@ -78,22 +80,11 @@ public class Poste {
 	public void setService(Service service) {
 		this.service = service;
 	}
-
-	public boolean isChef_service() {
-		return chef_service;
-	}
-
-	public void setChef_service(boolean chef_service) {
-		this.chef_service = chef_service;
-	}
-
-	public boolean isChef_departement() {
-		return chef_departement;
-	}
-
-	public void setChef_departement(boolean chef_departement) {
-		this.chef_departement = chef_departement;
-	}
+	
+	
+	
+	
+	
 	
 	
 }

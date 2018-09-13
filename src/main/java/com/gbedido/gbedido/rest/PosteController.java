@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +24,7 @@ public class PosteController {
 	PosteRepository postRepository;
 	
 	@PostMapping
-	public ResponseEntity <Poste>  savePost(@RequestBody Poste poste)
+	public ResponseEntity <Poste>  savePost(@RequestBody final Poste poste)
 	{
 		return ResponseEntity.ok().body(postRepository.save(poste));
 	}
@@ -50,9 +49,10 @@ public class PosteController {
 		return postRepository.findById(id).get();
 	}
 	
-	@PutMapping
-	public Poste updatePoste(@RequestBody Poste poste)
+	@PostMapping("/{id}")
+	public Poste updatePoste(@PathVariable Long id, @RequestBody final Poste poste)
 	{
+		poste.setId(id);
 		return postRepository.save(poste);
 		
 	}

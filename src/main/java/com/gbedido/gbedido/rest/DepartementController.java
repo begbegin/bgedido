@@ -1,8 +1,6 @@
 package com.gbedido.gbedido.rest;
 
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,10 +31,9 @@ public class DepartementController {
 		return ResponseEntity.ok()
 				.body(departementRepository.save(departement));
 	}
-	
-	
+		
 	@GetMapping
-	public ResponseEntity<Page<Departement>> findAllDepartement(@PageableDefault(size=10)Pageable pageable) {
+	public ResponseEntity<Page<Departement>> findAllDepartement(@PageableDefault(size=3)Pageable pageable) {
 		Page<Departement> page = departementRepository.findAll(pageable);
 	    return ResponseEntity.ok().body(page);
 	}
@@ -51,13 +47,14 @@ public class DepartementController {
 	
 	@GetMapping("/{id}")
 	public Departement getDepartement(@PathVariable Long id)
-	{
+	{	
 		return departementRepository.findById(id).get();
 	}
 	
-	@PutMapping
-	public Departement updateDepartement(@RequestBody final Departement departement)
+	@PostMapping("/{id}")
+	public Departement updateDepartement(@PathVariable Long id,@RequestBody final Departement departement)
 	{
+		departement.setId(id);
 		return departementRepository.save(departement);
 	}
 
@@ -67,5 +64,6 @@ public class DepartementController {
 		departementRepository.deleteById(id);	
 		return ResponseEntity.ok().body(id);
 	}
+
 	
 }

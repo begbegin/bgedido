@@ -11,7 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
+
 @Entity
+
+@JsonIgnoreProperties(value="password",allowGetters=false, allowSetters=true)
 public class User {
 
 	@Id
@@ -37,7 +44,7 @@ public class User {
 		
 	}
 	
-	public User(String nom, String prenoms, String login, String password, int telephone, String email, Poste poste,
+	public User(String nom, String prenoms, String login, String password,int telephone, String email, Poste poste,
 			Set<Rapport> rapport) {
 		this.nom = nom;
 		this.prenoms = prenoms;
@@ -79,15 +86,15 @@ public class User {
 	public void setLogin(String login) {
 		this.login = login;
 	}
-
+	
 	public String getPassword() {
 		return password;
 	}
-
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	public int getTelephone() {
 		return telephone;
 	}
